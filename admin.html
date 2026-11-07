@@ -1,0 +1,1104 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#181610">
+<title>لوحة التحكم — مدحليوس</title>
+<meta name="description" content="لوحة تحكم مدحليوس: اكتب المنشورات، صنّفها، وحرّرها قبل النشر.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Alexandria:wght@400;500;600;700;800&family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%2322409A'/%3E%3Crect x='15' y='15' width='20' height='20' rx='3' fill='%23F4EFE4'/%3E%3Crect x='29' y='29' width='20' height='20' rx='3' fill='none' stroke='%23F4EFE4' stroke-width='3'/%3E%3C/svg%3E">
+<script>
+(function () {
+  try {
+    var ok = false;
+    for (var i = 0; i < 2; i++) {
+      var store = i === 0 ? sessionStorage : localStorage;
+      var raw = store.getItem('mdh_session_v1');
+      if (!raw) continue;
+      var data = JSON.parse(raw);
+      if (data && data.at && Date.now() - data.at < 30 * 24 * 60 * 60 * 1000) { ok = true; break; }
+      store.removeItem('mdh_session_v1');
+    }
+    if (!ok) location.replace('index.html?next=admin.html');
+  } catch (e) {
+    location.replace('index.html?next=admin.html');
+  }
+})();
+</script>
+<style>
+:root{
+  --paper:#F4EFE4;
+  --paper-2:#EBE3D3;
+  --card:#FFFCF4;
+  --ink:#181610;
+  --ink-2:#302C24;
+  --muted:#6F6759;
+  --line:#D8CEBB;
+  --line-strong:#C6BBA5;
+  --cobalt:#22409A;
+  --cobalt-dark:#172C6E;
+  --cobalt-soft:#E3E8F7;
+  --olive:#56652F;
+  --clay:#A8431F;
+  --danger:#9C2E1B;
+  --white:#FFFDF6;
+  --r-sm:8px;
+  --r-md:12px;
+  --r-lg:18px;
+  --font-display:'Alexandria',system-ui,sans-serif;
+  --font-body:'IBM Plex Sans Arabic',system-ui,-apple-system,sans-serif;
+  --font-mono:'IBM Plex Mono',ui-monospace,monospace;
+  --shadow:0 24px 60px -36px rgba(24,22,16,.5);
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html{scroll-behavior:smooth}
+body{
+  margin:0;min-height:100svh;font-family:var(--font-body);font-size:16px;line-height:1.7;
+  color:var(--ink);background:var(--paper);-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
+}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit}
+svg{display:block}
+::selection{background:var(--cobalt);color:var(--paper)}
+.skip{position:fixed;inset-inline-start:16px;top:-80px;z-index:200;padding:10px 16px;border-radius:var(--r-sm);background:var(--ink);color:var(--paper);font-size:14px;transition:top .18s}
+.skip:focus{top:16px}
+:focus-visible{outline:3px solid rgba(34,64,154,.45);outline-offset:2px}
+.visually-hidden{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+
+.app{display:grid;grid-template-columns:266px minmax(0,1fr);min-height:100svh}
+
+/* ---------------- sidebar ---------------- */
+.sidebar{
+  position:sticky;top:0;height:100svh;z-index:20;
+  display:flex;flex-direction:column;gap:26px;
+  padding:26px 20px;background:var(--ink);color:var(--paper);
+  overflow:auto;min-width:0;
+}
+.sidebar::after{
+  content:"";position:fixed;inset-block:0;inset-inline-start:0;width:266px;z-index:-1;
+  background-image:linear-gradient(rgba(244,239,228,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(244,239,228,.035) 1px,transparent 1px);
+  background-size:64px 64px;pointer-events:none;
+}
+.brand{display:inline-flex;align-items:center;gap:11px;line-height:1;color:var(--paper)}
+.mark{position:relative;display:inline-block;width:34px;height:34px;flex:none}
+.mark i{position:absolute;width:20px;height:20px;border-radius:4px}
+.mark i:first-child{inset-block-start:0;inset-inline-end:0;background:currentColor}
+.mark i:last-child{inset-block-end:0;inset-inline-start:0;border:1.5px solid currentColor}
+.brand-text{display:flex;flex-direction:column;gap:3px}
+.brand-text b{font-family:var(--font-display);font-size:18px;font-weight:700}
+.brand-text small{font-family:var(--font-mono);font-size:9px;letter-spacing:.24em;opacity:.6}
+.side-badge{align-self:flex-start;font-family:var(--font-mono);font-size:10px;letter-spacing:.1em;color:rgba(244,239,228,.72);border:1px solid rgba(244,239,228,.2);border-radius:999px;padding:5px 9px}
+.side-nav{display:flex;flex-direction:column;gap:4px;margin-top:6px}
+.nav-item{
+  display:flex;align-items:center;gap:11px;min-height:44px;padding:0 12px;border:0;border-radius:10px;
+  background:transparent;color:rgba(244,239,228,.68);font-size:14px;text-align:start;cursor:pointer;
+  transition:background .16s,color .16s;
+}
+.nav-item svg{width:19px;height:19px;flex:none;opacity:.85}
+.nav-item:hover{background:rgba(244,239,228,.07);color:var(--paper)}
+.nav-item.is-active{background:var(--paper);color:var(--ink);font-weight:600}
+.nav-item.is-active svg{opacity:1}
+.nav-item .count{
+  margin-inline-start:auto;min-width:22px;height:20px;padding:0 6px;border-radius:999px;
+  display:inline-flex;align-items:center;justify-content:center;
+  font-family:var(--font-mono);font-size:10px;background:rgba(244,239,228,.12);color:rgba(244,239,228,.8);
+}
+.nav-item.is-active .count{background:var(--cobalt-soft);color:var(--cobalt)}
+.side-note{
+  margin-top:auto;padding:14px;border:1px solid rgba(244,239,228,.14);border-radius:12px;
+  font-size:11.5px;line-height:1.75;color:rgba(244,239,228,.68);
+}
+.side-note b{display:block;color:rgba(244,239,228,.82);font-size:12px;margin-bottom:3px;font-weight:600}
+.side-foot{display:flex;align-items:center;gap:10px;padding-top:16px;border-top:1px solid rgba(244,239,228,.12)}
+.avatar{
+  width:38px;height:38px;border-radius:50%;display:grid;place-items:center;flex:none;
+  background:var(--cobalt);color:var(--paper);font-family:var(--font-display);font-weight:700;font-size:16px;
+}
+.user-info{min-width:0;line-height:1.4}
+.user-info b{display:block;font-size:13px;font-weight:600}
+.user-info small{display:block;font-family:var(--font-mono);font-size:9.5px;color:rgba(244,239,228,.62);direction:ltr;text-align:start;overflow:hidden;text-overflow:ellipsis}
+.logout{
+  margin-inline-start:auto;width:40px;height:40px;display:grid;place-items:center;flex:none;
+  border:1px solid rgba(244,239,228,.16);border-radius:9px;background:transparent;color:rgba(244,239,228,.66);cursor:pointer;
+  transition:background .16s,color .16s,border-color .16s;
+}
+.logout:hover{background:rgba(168,67,31,.24);border-color:rgba(168,67,31,.5);color:#FFD8CC}
+
+/* ---------------- main ---------------- */
+.main{min-width:0;padding:clamp(18px,3vw,40px);max-width:1380px;margin-inline:auto;width:100%}
+.topbar{display:flex;align-items:flex-start;justify-content:space-between;gap:20px;flex-wrap:wrap;margin-bottom:26px}
+.date{margin:0 0 5px;font-family:var(--font-mono);font-size:11px;letter-spacing:.06em;color:var(--muted)}
+.topbar h1{margin:0;font-family:var(--font-display);font-size:clamp(28px,3.4vw,40px);line-height:1.2;letter-spacing:-.02em;font-weight:700}
+.top-actions{display:flex;align-items:center;gap:9px;flex-wrap:wrap}
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;padding:0 18px;
+  border:1px solid transparent;border-radius:10px;font-size:13.5px;font-weight:600;cursor:pointer;
+  transition:transform .14s,background .16s,border-color .16s,color .16s,box-shadow .16s;
+}
+.btn:hover{transform:translateY(-1px)}
+.btn:active{transform:translateY(1px)}
+.btn svg{width:17px;height:17px}
+.btn.primary{background:var(--cobalt);color:var(--paper);box-shadow:0 14px 26px -18px rgba(34,64,154,.75)}
+.btn.primary:hover{background:var(--cobalt-dark)}
+.btn.ghost{background:var(--card);border-color:var(--line-strong);color:var(--ink-2)}
+.btn.ghost:hover{border-color:var(--ink-2)}
+.btn.danger{background:var(--danger);color:#FFF6F2}
+.btn.danger:hover{background:#7E2415}
+.btn.small{min-height:38px;padding:0 13px;font-size:12.5px}
+.btn[disabled]{opacity:.65;cursor:wait;transform:none}
+
+.stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-bottom:20px}
+.stat{
+  position:relative;padding:18px 20px;border:1px solid var(--line);border-radius:var(--r-lg);
+  background:var(--card);box-shadow:0 1px 0 rgba(255,255,255,.65) inset;
+}
+.stat:first-child{background:var(--ink);border-color:var(--ink);color:var(--paper)}
+.stat .label{font-size:12px;color:var(--muted);margin:0 0 8px}
+.stat:first-child .label{color:rgba(244,239,228,.58)}
+.stat strong{display:block;font-family:var(--font-mono);font-size:clamp(28px,3.4vw,38px);font-weight:500;line-height:1.1;letter-spacing:-.03em;font-variant-numeric:tabular-nums}
+.stat small{display:block;margin-top:7px;font-size:11px;color:var(--muted)}
+.stat:first-child small{color:rgba(244,239,228,.42)}
+
+.workspace{display:grid;grid-template-columns:minmax(0,.92fr) minmax(0,1.08fr);gap:18px;align-items:start}
+.panel{
+  border:1px solid var(--line);border-radius:var(--r-lg);background:var(--card);
+  box-shadow:0 1px 0 rgba(255,255,255,.7) inset;
+}
+.composer{padding:20px;position:sticky;top:20px}
+.panel-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:18px}
+.kicker{margin:0 0 4px;font-size:11.5px;color:var(--muted);display:flex;align-items:center;gap:7px}
+.kicker::before{content:"";width:16px;height:1px;background:currentColor;opacity:.55}
+.panel-head h2{margin:0;font-family:var(--font-display);font-size:21px;font-weight:700;letter-spacing:-.01em}
+.status{
+  flex:none;font-size:10.5px;font-family:var(--font-mono);padding:4px 9px;border-radius:999px;
+  background:#EDF0E1;color:#4B592B;border:1px solid #D5DCC2;
+}
+.status.edit{background:var(--cobalt-soft);color:var(--cobalt);border-color:#C8D2ED}
+.count-pill{
+  flex:none;min-width:30px;height:27px;padding:0 9px;display:inline-flex;align-items:center;justify-content:center;
+  border-radius:8px;background:var(--paper-2);color:var(--ink-2);font-family:var(--font-mono);font-size:11px;
+}
+form{display:flex;flex-direction:column;gap:14px}
+.field{display:flex;flex-direction:column;gap:6px;min-width:0}
+.field label,.tone-field legend{font-size:12.5px;font-weight:600;color:var(--ink-2)}
+.opt{font-weight:400;color:var(--muted);font-size:11px}
+.field input,.field select,.field textarea{
+  width:100%;border:1px solid var(--line-strong);border-radius:10px;background:var(--white);
+  color:var(--ink);font-family:var(--font-body);font-size:14px;transition:border-color .16s,box-shadow .16s,background .16s;
+}
+.field input,.field select{height:46px;padding:0 13px}
+.field textarea{padding:11px 13px;resize:vertical;min-height:56px;line-height:1.75}
+.field input::placeholder,.field textarea::placeholder{color:#7A7264;font-size:13px}
+.field input:hover,.field select:hover,.field textarea:hover{border-color:#AFA48D}
+.field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--cobalt);box-shadow:0 0 0 3.5px rgba(34,64,154,.12);background:var(--white)}
+.field.invalid input,.field.invalid textarea{border-color:var(--clay);box-shadow:0 0 0 3.5px rgba(168,67,31,.09)}
+.err{font-size:11.5px;color:var(--clay);line-height:1.5}
+.err:empty{display:none}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.tone-field{border:0;padding:0;margin:0;min-width:0}
+.tones{display:flex;gap:6px;margin-top:6px;flex-wrap:wrap}
+.tone-opt{position:relative;cursor:pointer}
+.tone-opt input{position:absolute;opacity:0;width:1px;height:1px}
+.tone-opt .sw{display:block;width:36px;height:36px;border-radius:8px;border:2px solid transparent;box-shadow:0 0 0 1px rgba(24,22,16,.14) inset;transition:transform .14s,border-color .14s}
+.tone-opt input:checked + .sw{border-color:var(--ink);transform:scale(1.04)}
+.tone-opt input:focus-visible + .sw{outline:3px solid rgba(34,64,154,.45);outline-offset:2px}
+.tone-opt .t{display:none}
+.sw-cobalt{background:#22409A}.sw-olive{background:#56652F}.sw-clay{background:#A8431F}.sw-ink{background:#24211B}
+.hint{display:flex;align-items:center;justify-content:space-between;gap:10px;font-size:11px;color:var(--muted);line-height:1.5}
+.counter{font-family:var(--font-mono);font-size:10px;color:var(--muted);text-align:end}
+.counter.at-limit{color:var(--clay)}
+.cover-preview{position:relative;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:var(--paper-2);aspect-ratio:16/8;max-height:240px}
+.cover-preview .art{position:absolute;inset:0}
+.cover-preview .note{position:absolute;inset-block-end:8px;inset-inline-start:8px;z-index:2;font-size:10px;color:rgba(255,253,246,.78);background:rgba(24,22,16,.42);padding:2px 7px;border-radius:5px;backdrop-filter:blur(3px)}
+.form-actions{display:flex;gap:9px;flex-wrap:wrap;padding-top:2px}
+.form-actions .btn{flex:1 1 auto}
+.form-actions .btn.primary{flex:2 1 180px}
+
+.art{position:relative;overflow:hidden;isolation:isolate;background:var(--tone,#22409A)}
+.art::before{
+  content:"";position:absolute;inset:0;z-index:1;opacity:.75;
+  background-image:
+    radial-gradient(circle at 82% 16%,rgba(255,253,246,.22) 0 18%,transparent 18.5%),
+    linear-gradient(135deg,rgba(255,253,246,.12),transparent 46%),
+    linear-gradient(rgba(255,253,246,.09) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,253,246,.09) 1px,transparent 1px);
+  background-size:auto,auto,38px 38px,38px 38px;
+}
+.art::after{
+  content:attr(data-letter);position:absolute;z-index:0;inset-inline-start:-.1em;inset-block-end:-.42em;
+  font-family:var(--font-display);font-weight:800;font-size:clamp(120px,20vw,260px);line-height:.8;
+  color:rgba(255,253,246,.17);pointer-events:none;
+}
+.art img{position:absolute;inset:0;z-index:2;width:100%;height:100%;object-fit:cover}
+.art.has-img::before{opacity:.35}
+.art.has-img::after{display:none}
+.tone-cobalt{--tone:#22409A}.tone-olive{--tone:#56652F}.tone-clay{--tone:#A8431F}.tone-ink{--tone:#24211B}
+
+.list-panel{padding:20px 20px 8px;min-height:420px}
+.list-tools{display:grid;grid-template-columns:1fr auto;gap:8px;margin-bottom:6px}
+.list-tools input,.list-tools select{
+  height:40px;border:1px solid var(--line-strong);border-radius:9px;background:var(--white);
+  padding:0 11px;font-family:var(--font-body);font-size:12.5px;color:var(--ink);min-width:0;
+}
+.list-tools input:focus,.list-tools select:focus{outline:none;border-color:var(--cobalt);box-shadow:0 0 0 3px rgba(34,64,154,.11)}
+.posts-list{display:flex;flex-direction:column}
+.post-row{
+  display:grid;grid-template-columns:58px minmax(0,1fr) auto;gap:12px;align-items:start;
+  padding:14px 0;border-top:1px solid var(--line);
+  transition:background .16s;
+}
+.post-row:first-child{border-top:0}
+.post-row:hover{background:rgba(235,227,211,.32)}
+.post-thumb{width:58px;height:58px;border-radius:9px;border:1px solid rgba(24,22,16,.12)}
+.post-thumb.art::after{font-size:52px;inset-block-end:-.34em}
+.post-body{min-width:0}
+.row-meta{display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin-bottom:2px}
+.cat{font-size:10px;padding:2px 7px;border-radius:5px;background:var(--paper-2);color:#5D5548;white-space:nowrap}
+.row-meta time{font-family:var(--font-mono);font-size:9.5px;color:var(--muted);white-space:nowrap}
+.post-body h3{margin:0 0 2px;font-size:14px;line-height:1.45;font-weight:600;overflow:hidden;display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical}
+.post-body p{margin:0;font-size:11.5px;line-height:1.6;color:var(--muted);overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+.row-actions{display:flex;gap:3px;padding-top:2px}
+.icon-btn{
+  width:34px;height:34px;display:grid;place-items:center;border:1px solid transparent;border-radius:8px;
+  background:transparent;color:var(--muted);cursor:pointer;transition:background .16s,color .16s,border-color .16s;
+}
+.icon-btn svg{width:16px;height:16px}
+.icon-btn:hover{background:var(--paper-2);border-color:var(--line);color:var(--ink)}
+.icon-btn.del:hover{background:#F7E3DA;border-color:#E3BCAB;color:var(--clay)}
+.empty{padding:56px 16px;text-align:center;color:var(--muted)}
+.empty .big{font-family:var(--font-display);font-size:22px;color:var(--ink);margin-bottom:4px}
+.empty p{margin:0 0 16px;font-size:13px}
+.empty .btn{display:inline-flex}
+
+/* ---------------- dialog + toast ---------------- */
+.dialog{
+  border:0;padding:0;border-radius:16px;background:var(--card);color:var(--ink);
+  width:min(92vw,430px);box-shadow:0 40px 100px -30px rgba(24,22,16,.6);
+}
+.dialog::backdrop{background:rgba(24,22,16,.52);backdrop-filter:blur(3px)}
+.dialog-inner{padding:24px}
+.dialog-icon{
+  width:42px;height:42px;display:grid;place-items:center;border-radius:50%;
+  background:#F7E3DA;color:var(--clay);margin-bottom:13px;
+}
+.dialog h2{margin:0 0 6px;font-family:var(--font-display);font-size:21px;line-height:1.3}
+.dialog p{margin:0 0 20px;font-size:13px;color:var(--muted);line-height:1.75}
+.dialog p b{color:var(--ink)}
+.dialog-actions{display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap}
+.dialog-actions .btn{flex:1 1 auto}
+.toast{
+  position:fixed;inset-block-end:20px;inset-inline-start:50%;transform:translate(-50%,18px);
+  z-index:300;display:flex;align-items:center;gap:9px;
+  padding:11px 16px;border-radius:10px;background:var(--ink);color:var(--paper);
+  font-size:13px;box-shadow:0 18px 40px -18px rgba(24,22,16,.6);
+  opacity:0;pointer-events:none;transition:opacity .2s,transform .2s;
+  max-width:calc(100vw - 32px);
+}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+.toast svg{width:16px;height:16px;color:#C9D4FF;flex:none}
+.toast.error{background:var(--danger)}
+
+@media (max-width:1080px){
+  .app{grid-template-columns:1fr}
+  .sidebar{position:static;height:auto;flex-direction:row;align-items:center;gap:16px;padding:14px 18px;overflow:visible}
+  .sidebar::after{display:none}
+  .side-badge,.side-note{display:none}
+  .side-nav{flex-direction:row;margin:0;margin-inline-start:auto;gap:2px;overflow:auto;min-width:0}
+  .nav-item{min-height:40px;padding:0 10px;white-space:nowrap}
+  .nav-item .count{display:none}
+  .side-foot{border:0;padding:0;margin-inline-start:auto}
+  .user-info{display:none}
+  .logout{margin:0}
+}
+@media (max-width:900px){
+  .composer{position:static}
+  .workspace{grid-template-columns:1fr}
+}
+@media (max-width:720px){
+  .main{padding:16px}
+  .stats{grid-template-columns:1fr 1fr}
+  .stat:first-child{grid-column:1/-1}
+  .grid-2{grid-template-columns:1fr}
+  .list-tools{grid-template-columns:1fr}
+  .post-row{grid-template-columns:48px minmax(0,1fr) auto;gap:10px}
+  .post-thumb{width:48px;height:48px}
+  .top-actions{width:100%}
+  .top-actions .btn{flex:1 1 auto}
+}
+@media (max-width:520px){
+  .sidebar{flex-wrap:wrap;gap:10px}
+  .side-nav{width:100%;order:3;margin:0;padding-top:8px;border-top:1px solid rgba(244,239,228,.1)}
+  .nav-item{flex:1 1 auto;justify-content:center}
+  .side-foot{margin-inline-start:0}
+  .stats{grid-template-columns:1fr}
+  .stat:first-child{grid-column:auto}
+  .post-body p{display:none}
+  .post-row{align-items:center}
+  .chip-filter{display:none}
+}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important}
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">تجاوز إلى المحتوى</a>
+
+<div class="app">
+  <aside class="sidebar" aria-label="التنقل الجانبي">
+    <div>
+      <a class="brand" href="posts.html" aria-label="مدحليوس — صفحة المنشورات">
+        <span class="mark" aria-hidden="true"><i></i><i></i></span>
+        <span class="brand-text"><b>مدحليوس</b><small>MDHILEOS</small></span>
+      </a>
+      <span class="side-badge" style="margin-top:14px">لوحة التحكم · V1</span>
+    </div>
+
+    <nav class="side-nav" aria-label="أقسام اللوحة">
+      <button type="button" class="nav-item is-active" data-target="list-panel">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h10"/></svg>
+        <span>المنشورات</span>
+        <span class="count" id="nav-count">0</span>
+      </button>
+      <button type="button" class="nav-item" data-target="composer">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L8 18l-4 1 1-4Z"/></svg>
+        <span>منشور جديد</span>
+      </button>
+      <a class="nav-item" href="posts.html" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3h7v7"/><path d="M10 14 21 3"/><path d="M21 14v5a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5"/></svg>
+        <span>عرض الموقع</span>
+      </a>
+    </nav>
+
+    <div class="side-note">
+      <b>ملاحظة سريعة</b>
+      المنشورات تُحفظ محلياً في هذا المتصفح. افتح صفحة المنشورات في نفس المتصفح لرؤية ما نشرته.
+    </div>
+
+    <div class="side-foot">
+      <span class="avatar" aria-hidden="true">م</span>
+      <div class="user-info"><b>المدير</b><small>admin@mdhileos.com</small></div>
+      <button type="button" class="logout" id="logout" aria-label="تسجيل الخروج" title="تسجيل الخروج">
+        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="m16 17 5-5-5-5"/><path d="M21 12H9"/></svg>
+      </button>
+    </div>
+  </aside>
+
+  <main class="main" id="main">
+    <header class="topbar">
+      <div>
+        <p class="date" id="today">—</p>
+        <h1>لوحة التحكم</h1>
+      </div>
+      <div class="top-actions">
+        <a class="btn ghost" href="posts.html" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3h7v7"/><path d="M10 14 21 3"/><path d="M21 14v5a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5"/></svg>
+          عرض الموقع
+        </a>
+        <button type="button" class="btn primary" id="new-post-btn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+          منشور جديد
+        </button>
+      </div>
+    </header>
+
+    <section class="stats" aria-label="إحصاءات المنشورات">
+      <article class="stat">
+        <p class="label">إجمالي المنشورات</p>
+        <strong id="stat-total">0</strong>
+        <small>منشوراً في الدفتر</small>
+      </article>
+      <article class="stat">
+        <p class="label">التصنيفات المستخدمة</p>
+        <strong id="stat-cats">0</strong>
+        <small>تصنيفاً مختلفاً</small>
+      </article>
+      <article class="stat">
+        <p class="label">آخر تحديث</p>
+        <strong id="stat-date" style="font-size:clamp(16px,1.8vw,22px);line-height:1.4">—</strong>
+        <small>آخر منشور أُضيف أو عُدّل</small>
+      </article>
+    </section>
+
+    <div class="workspace">
+      <section class="panel composer" id="composer" aria-labelledby="compose-title">
+        <header class="panel-head">
+          <div>
+            <p class="kicker" id="compose-kicker">مسودة جديدة</p>
+            <h2 id="compose-title">اكتب منشوراً</h2>
+          </div>
+          <span class="status" id="compose-status">جاهز</span>
+        </header>
+
+        <form id="post-form" novalidate>
+          <div class="field" id="field-title">
+            <label for="title">عنوان المنشور</label>
+            <input id="title" name="title" type="text" maxlength="90" placeholder="مثال: لماذا تبدو واجهاتنا متشابهة؟" required aria-describedby="title-err">
+            <span class="err" id="title-err"></span>
+          </div>
+
+          <div class="grid-2">
+            <div class="field">
+              <label for="category">التصنيف</label>
+              <select id="category" name="category">
+                <option>تصميم</option>
+                <option>تطوير</option>
+                <option>تجربة مستخدم</option>
+                <option>أخرى</option>
+              </select>
+            </div>
+
+            <fieldset class="tone-field">
+              <legend>لون الغلاف</legend>
+              <div class="tones">
+                <label class="tone-opt" title="كوبالت"><input type="radio" name="tone" value="cobalt" aria-label="لون الغلاف: كوبالت" checked><span class="sw sw-cobalt"></span><span class="t">كوبالت</span></label>
+                <label class="tone-opt" title="زيتوني"><input type="radio" name="tone" value="olive" aria-label="لون الغلاف: زيتوني"><span class="sw sw-olive"></span><span class="t">زيتوني</span></label>
+                <label class="tone-opt" title="طيني"><input type="radio" name="tone" value="clay" aria-label="لون الغلاف: طيني"><span class="sw sw-clay"></span><span class="t">طيني</span></label>
+                <label class="tone-opt" title="حبري"><input type="radio" name="tone" value="ink" aria-label="لون الغلاف: حبري"><span class="sw sw-ink"></span><span class="t">حبري</span></label>
+              </div>
+            </fieldset>
+          </div>
+
+          <div class="field">
+            <label for="excerpt">المقتطف <span class="opt">(اختياري)</span></label>
+            <textarea id="excerpt" name="excerpt" maxlength="180" rows="2" placeholder="سطران يلخّصان فكرة المنشور." aria-describedby="excerpt-count"></textarea>
+            <div class="counter" id="excerpt-count">0/180</div>
+          </div>
+
+          <div class="field" id="field-body">
+            <label for="body">المحتوى</label>
+            <textarea id="body" name="body" rows="7" placeholder="اكتب المنشور هنا. افصل بين الفقرات بسطر فارغ." required aria-describedby="body-err word-count"></textarea>
+            <div class="hint"><span class="err" id="body-err"></span><span id="word-count">0 كلمة</span></div>
+          </div>
+
+          <div class="field">
+            <label for="cover">رابط صورة الغلاف <span class="opt">(اختياري)</span></label>
+            <input id="cover" name="cover" type="url" inputmode="url" placeholder="https://example.com/image.jpg" aria-describedby="cover-hint">
+          </div>
+
+          <div class="cover-preview" aria-hidden="true">
+            <div class="art tone-cobalt" id="preview-art" data-letter="م"></div>
+            <span class="note" id="cover-hint">اترك الرابط فارغاً لاستخدام غلاف مرسوم</span>
+          </div>
+
+          <div class="form-actions">
+            <button class="btn primary" id="save-btn" type="submit">نشر المنشور</button>
+            <button class="btn ghost" id="cancel-edit" type="button" hidden>إلغاء التعديل</button>
+          </div>
+        </form>
+      </section>
+
+      <section class="panel list-panel" id="list-panel" aria-labelledby="list-title">
+        <header class="panel-head">
+          <div>
+            <p class="kicker">الأرشيف</p>
+            <h2 id="list-title">المنشورات</h2>
+          </div>
+          <span class="count-pill" id="list-count">0</span>
+        </header>
+
+        <div class="list-tools">
+          <input id="list-search" type="search" placeholder="ابحث في العناوين..." aria-label="بحث في المنشورات">
+          <select id="list-filter" aria-label="تصفية حسب التصنيف">
+            <option value="all">الكل</option>
+            <option>تصميم</option>
+            <option>تطوير</option>
+            <option>تجربة مستخدم</option>
+            <option>أخرى</option>
+          </select>
+        </div>
+
+        <div class="posts-list" id="posts-list"></div>
+      </section>
+    </div>
+  </main>
+</div>
+
+<dialog class="dialog" id="confirm-dialog" aria-labelledby="confirm-title">
+  <form method="dialog" class="dialog-inner">
+    <div class="dialog-icon" aria-hidden="true">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M8 6V4h8v2"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v5M14 11v5"/></svg>
+    </div>
+    <h2 id="confirm-title">حذف المنشور؟</h2>
+    <p id="confirm-text">لا يمكن التراجع عن هذا الإجراء.</p>
+    <div class="dialog-actions">
+      <button class="btn ghost" value="cancel">إلغاء</button>
+      <button class="btn danger" value="delete">حذف نهائي</button>
+    </div>
+  </form>
+</dialog>
+
+<div class="toast" id="toast" role="status" aria-live="polite">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>
+  <span id="toast-text"></span>
+</div>
+
+<script>
+(() => {
+  'use strict';
+
+  const STORE_KEY = 'mdh_posts_v1';
+  const SESSION_KEY = 'mdh_session_v1';
+  const TONE_BY_CAT = { 'تصميم': 'cobalt', 'تطوير': 'olive', 'تجربة مستخدم': 'clay', 'أخرى': 'ink' };
+
+  const SEED = [
+    {
+      id: 'seed-1',
+      title: 'لماذا تبدو واجهاتنا متشابهة؟',
+      category: 'تصميم',
+      tone: 'cobalt',
+      excerpt: 'التشابه ليس مشكلة ذوق فقط؛ إنه نتيجة مباشرة لاختيارات نتخذها بالنيابة عن أنفسنا قبل أن نفهم المشروع.',
+      body: [
+        'تبدأ المشكلة عادةً من أول قرار: نفتح قائمة القوالب قبل أن نفتح دفتر المشروع. يصبح السؤال «أي قالب يشبه ما نريد؟» بدلاً من «من يقرأ هذه الصفحة، وما الشيء الواحد الذي يجب أن يفهمه أولاً؟».',
+        'القالب ليس عيباً في حد ذاته، لكنه يصبح عيباً حين يسبق السؤال. حين تبدأ من شكل جاهز، تصبح كل القرارات التالية تبريرات للشكل، لا إجابات عن المحتوى.',
+        'البديل ليس تعقيداً. إنه تسلسل بسيط: الجمهور، ثم المهمة، ثم المعلومة الأولى، ثم الشخصية. بعدها فقط يأتي اللون والخط والمسافة، ويكون كل منها نتيجة لاختيار واعٍ.',
+        'حين تفعل ذلك، لن تصبح الواجهة «مختلفة» لمجرد الاختلاف؛ ستصبح محددة. والمحددة هي التي تُتذكّر.'
+      ].join('\n\n'),
+      date: '2026-11-05T09:00:00.000Z'
+    },
+    {
+      id: 'seed-2',
+      title: 'نظام تصميم يبدأ من فراغ',
+      category: 'تطوير',
+      tone: 'olive',
+      excerpt: 'قبل الألوان والخطوط، هناك قرارات أصغر بكثير: مقياس المسافات، وحدود الحواف، وطريقة تسمية الأشياء.',
+      body: [
+        'أكثر ما يجعل نظام التصميم يفشل ليس نقص المكوّنات، بل غياب القرارات الصغيرة المتسقة. مقياس مسافات واحد، وحدود واضحة للحواف، وأسماء تصف الوظيفة لا الشكل.',
+        'ابدأ بمقياس من أربع خطوات، مثل 4 و8 و16 و32. ثم أضف نصف الخطوة عند الحاجة فقط. القاعدة ليست أن تستخدم كل الأرقام، بل ألا تخترع رقماً جديداً كلما ضاقت المسافة.',
+        'سمِّ الألوان بمعناها: خلفية، سطح، نص، نص ثانوي، حدود، تركيز. حين يتغير اللون لاحقاً، يتغير في مكان واحد، وتبقى بقية النظام كما هي.',
+        'النظام الجيد لا يُرى في ملف المكوّنات؛ يُرى في اتساق الصفحات التي بُنيت به دون أن يتذكر أحد أنه يستخدمه.'
+      ].join('\n\n'),
+      date: '2026-10-28T11:30:00.000Z'
+    },
+    {
+      id: 'seed-3',
+      title: 'القراءة على الشاشة: ما لا تخبرك به المقاييس',
+      category: 'تجربة مستخدم',
+      tone: 'clay',
+      excerpt: 'طول السطر وارتفاعه ليسا تفاصيل جمالية؛ هما شرطان أساسيان لاستمرار القارئ مع النص.',
+      body: [
+        'نقيس سرعة الموقع، ونقيس حجم الأزرار، ثم ننسى السؤال الأهم: هل يستطيع القارئ إكمال الفقرة التالية؟',
+        'السطر الطويل يرهق العين لأنها تحتاج مسافة أكبر للعودة إلى بداية السطر. والسطر القصير يقطع الإيقاع. للمحتوى العربي، ابدأ من 60 إلى 75 حرفاً واختبر، ولا تتعامل مع الرقم كقانون مقدس.',
+        'ارتفاع السطر مهم أيضاً. النص العربي يحتاج مساحة تنفس أكبر من اللاتيني، خصوصاً مع الخطوط ذات التفاصيل. ابدأ من 1.7 وعدّل حسب حجم الخط ووزنه.',
+        'التباين ليس رفاهية بصرية. النص الثانوي يجب أن يبقى مقروءاً، والحدود يجب أن تُرى، وحالة التركيز يجب ألا تختفي. ما لا يُقرأ لا يُستخدم.'
+      ].join('\n\n'),
+      date: '2026-10-19T08:15:00.000Z'
+    },
+    {
+      id: 'seed-4',
+      title: 'دفتر صغير للحركة الهادئة',
+      category: 'تصميم',
+      tone: 'ink',
+      excerpt: 'الحركة الجيدة لا تُرى؛ إنها تجيب على سؤال واحد: ماذا تغيّر للتو؟',
+      body: [
+        'الحركة ليست طبقة تُضاف في النهاية. إنها تفسير للتغيّر. القائمة التي تُفتح، والزر الذي يؤكد الإجراء، والبطاقة التي تنتقل إلى مكانها؛ كلها إجابات بصرية عن سؤال «ماذا حدث؟».',
+        'ابدأ من 150 إلى 250 مللي ثانية للأشياء الصغيرة، وزد فقط حين تكون المسافة أطول. المنحنى الهادئ أفضل من الارتداد المبالغ فيه، والتأخير المقصود أفضل من الحركة المتزامنة لكل شيء.',
+        'احترم من يطلب تقليل الحركة. اجعل كل شيء يظهر ويستقر دون حركة، واحتفظ بالمعنى بدلاً من التأثير.',
+        'القاعدة الأخيرة: إن لم تستطع شرح سبب الحركة في جملة واحدة، فهي زينة. والزينة أول ما يُحذف.'
+      ].join('\n\n'),
+      date: '2026-10-07T14:40:00.000Z'
+    },
+    {
+      id: 'seed-5',
+      title: 'من الفكرة إلى المنشور: مسار قصير',
+      category: 'تطوير',
+      tone: 'olive',
+      excerpt: 'كل خطوة إضافية بين الفكرة والنشر هي سبب إضافي لتأجيلها. اختصر المسار.',
+      body: [
+        'الفكرة التي تبقى في دفتر الملاحظات لا تتحول إلى منشور. ليست المشكلة في الكتابة، بل في المسافة بين لحظة الحماس ولحظة النشر.',
+        'اختصر المسار إلى ثلاثة قرارات: ما الفكرة؟ لمن تُكتب؟ وما الإجراء التالي للقارئ؟ ثم اكتب مسودة واحدة سريعة، وحرّرها مرة واحدة، وانشر.',
+        'لا تنتظر أن يكتمل النظام أو أن تصبح الواجهة مثالية. المنشور الأول على نظام بسيط أفضل من نظام كامل بلا منشورات.',
+        'وأخيراً: اجعل النشر سهلاً فعلاً. إن احتجت إلى أكثر من دقيقتين للوصول إلى مربع الكتابة، فالمشكلة في المسار لا في الإرادة.'
+      ].join('\n\n'),
+      date: '2026-09-24T10:05:00.000Z'
+    }
+  ];
+
+  const $ = (sel, root = document) => root.querySelector(sel);
+  const $$ = (sel, root = document) => Array.from(root.querySelectorAll(sel));
+
+  let posts = loadPosts();
+  let editingId = null;
+  let pendingDelete = null;
+  let listQuery = '';
+  let listCat = 'all';
+  let toastTimer = null;
+
+  const form = $('#post-form');
+  const titleInput = $('#title');
+  const categoryInput = $('#category');
+  const excerptInput = $('#excerpt');
+  const bodyInput = $('#body');
+  const coverInput = $('#cover');
+  const previewArt = $('#preview-art');
+  const listEl = $('#posts-list');
+  const dialog = $('#confirm-dialog');
+  const toast = $('#toast');
+
+  function readSession() {
+    for (const store of [sessionStorage, localStorage]) {
+      try {
+        const raw = store.getItem(SESSION_KEY);
+        if (!raw) continue;
+        const data = JSON.parse(raw);
+        if (data && data.at && Date.now() - data.at < 30 * 24 * 60 * 60 * 1000) return data;
+      } catch (_) { /* ignore */ }
+    }
+    return null;
+  }
+
+  function loadPosts() {
+    try {
+      const raw = localStorage.getItem(STORE_KEY);
+      if (raw === null) {
+        localStorage.setItem(STORE_KEY, JSON.stringify(SEED));
+        return SEED.map((p) => ({ ...p }));
+      }
+      const parsed = JSON.parse(raw);
+      if (!Array.isArray(parsed)) throw new Error('bad data');
+      return parsed;
+    } catch (_) {
+      try { localStorage.setItem(STORE_KEY, JSON.stringify(SEED)); } catch (e) { /* ignore */ }
+      return SEED.map((p) => ({ ...p }));
+    }
+  }
+
+  function savePosts() {
+    try { localStorage.setItem(STORE_KEY, JSON.stringify(posts)); } catch (_) { /* ignore */ }
+  }
+
+  function normalizeUrl(value) {
+    const raw = String(value || '').trim();
+    if (!raw) return '';
+    try {
+      const url = new URL(raw);
+      return (url.protocol === 'http:' || url.protocol === 'https:') ? url.href : '';
+    } catch (_) { return ''; }
+  }
+
+  function formatDate(iso, withYear = true) {
+    const date = new Date(iso);
+    if (Number.isNaN(date.getTime())) return '—';
+    try {
+      return new Intl.DateTimeFormat('ar-u-nu-latn', {
+        day: 'numeric', month: 'long', ...(withYear ? { year: 'numeric' } : {})
+      }).format(date);
+    } catch (_) {
+      return date.toLocaleDateString('ar');
+    }
+  }
+
+  function readTime(body) {
+    const words = String(body || '').trim().split(/\s+/).filter(Boolean).length;
+    return Math.max(1, Math.round(words / 160));
+  }
+
+  function firstLetter(text) {
+    const clean = String(text || '').replace(/[\s"'«»()\-—.,،؛:!?]/g, '');
+    return clean ? Array.from(clean)[0] : 'م';
+  }
+
+  function toneOf(post) {
+    return ['cobalt', 'olive', 'clay', 'ink'].includes(post.tone) ? post.tone : (TONE_BY_CAT[post.category] || 'cobalt');
+  }
+
+  function el(tag, className, text) {
+    const node = document.createElement(tag);
+    if (className) node.className = className;
+    if (text !== undefined) node.textContent = text;
+    return node;
+  }
+
+  function makeArt(post, extraClass = '') {
+    const art = el('div', 'art tone-' + toneOf(post) + (post.cover ? ' has-img' : '') + (extraClass ? ' ' + extraClass : ''));
+    art.setAttribute('data-letter', firstLetter(post.title));
+    art.setAttribute('aria-hidden', 'true');
+    const cover = normalizeUrl(post.cover);
+    if (cover) {
+      const img = document.createElement('img');
+      img.src = cover;
+      img.alt = '';
+      img.loading = 'lazy';
+      img.referrerPolicy = 'no-referrer';
+      img.addEventListener('error', () => {
+        img.remove();
+        art.classList.remove('has-img');
+      });
+      art.appendChild(img);
+    }
+    return art;
+  }
+
+  function showToast(message, isError = false) {
+    $('#toast-text').textContent = message;
+    toast.classList.toggle('error', isError);
+    toast.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => toast.classList.remove('show'), 2800);
+  }
+
+  function updateStats() {
+    $('#stat-total').textContent = String(posts.length).padStart(2, '0');
+    const cats = new Set(posts.map((p) => p.category).filter(Boolean));
+    $('#stat-cats').textContent = String(cats.size).padStart(2, '0');
+    $('#nav-count').textContent = String(posts.length);
+    $('#list-count').textContent = String(posts.length);
+
+    const latest = posts.reduce((acc, p) => {
+      const t = new Date(p.updatedAt || p.date || 0).getTime();
+      return Number.isFinite(t) && t > acc ? t : acc;
+    }, 0);
+    $('#stat-date').textContent = latest ? formatDate(new Date(latest).toISOString(), false) : '—';
+  }
+
+  function filteredPosts() {
+    const q = listQuery.trim().toLowerCase();
+    return posts
+      .slice()
+      .sort((a, b) => new Date(b.updatedAt || b.date) - new Date(a.updatedAt || a.date))
+      .filter((p) => listCat === 'all' || p.category === listCat)
+      .filter((p) => !q || String(p.title).toLowerCase().includes(q) || String(p.excerpt || '').toLowerCase().includes(q));
+  }
+
+  function renderList() {
+    listEl.textContent = '';
+    const items = filteredPosts();
+
+    if (!items.length) {
+      const empty = el('div', 'empty');
+      const hasFilter = Boolean(listQuery.trim()) || listCat !== 'all';
+      empty.appendChild(el('div', 'big', hasFilter ? 'لا نتائج مطابقة' : 'الدفتر فارغ'));
+      empty.appendChild(el('p', '', hasFilter ? 'جرّب كلمة أخرى أو أعد التصفية إلى الكل.' : 'ابدأ بأول منشور، وسيظهر هنا وفي صفحة القراءة.'));
+      if (!hasFilter) {
+        const btn = el('button', 'btn primary small', 'اكتب أول منشور');
+        btn.type = 'button';
+        btn.addEventListener('click', () => { resetForm(); focusComposer(); });
+        empty.appendChild(btn);
+      } else {
+        const btn = el('button', 'btn ghost small', 'مسح التصفية');
+        btn.type = 'button';
+        btn.addEventListener('click', () => {
+          listQuery = ''; listCat = 'all';
+          $('#list-search').value = ''; $('#list-filter').value = 'all';
+          renderList();
+        });
+        empty.appendChild(btn);
+      }
+      listEl.appendChild(empty);
+      return;
+    }
+
+    for (const post of items) {
+      const row = el('article', 'post-row');
+      row.dataset.id = post.id;
+
+      const thumb = makeArt(post, 'post-thumb');
+      row.appendChild(thumb);
+
+      const body = el('div', 'post-body');
+      const meta = el('div', 'row-meta');
+      meta.appendChild(el('span', 'cat', post.category || 'عام'));
+      const time = document.createElement('time');
+      time.dateTime = post.date || '';
+      time.textContent = formatDate(post.updatedAt || post.date, false);
+      meta.appendChild(time);
+      body.appendChild(meta);
+
+      const h3 = el('h3', '', post.title);
+      body.appendChild(h3);
+      if (post.excerpt) body.appendChild(el('p', '', post.excerpt));
+      row.appendChild(body);
+
+      const actions = el('div', 'row-actions');
+      const editBtn = el('button', 'icon-btn');
+      editBtn.type = 'button';
+      editBtn.dataset.edit = post.id;
+      editBtn.setAttribute('aria-label', 'تعديل: ' + post.title);
+      editBtn.title = 'تعديل';
+      editBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L8 18l-4 1 1-4Z"/></svg>';
+      actions.appendChild(editBtn);
+
+      const delBtn = el('button', 'icon-btn del');
+      delBtn.type = 'button';
+      delBtn.dataset.del = post.id;
+      delBtn.setAttribute('aria-label', 'حذف: ' + post.title);
+      delBtn.title = 'حذف';
+      delBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h18"/><path d="M8 6V4h8v2"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v5M14 11v5"/></svg>';
+      actions.appendChild(delBtn);
+
+      row.appendChild(actions);
+      listEl.appendChild(row);
+    }
+  }
+
+  function renderAll() {
+    updateStats();
+    renderList();
+  }
+
+  function updateExcerptCounter() {
+    const counter = $('#excerpt-count');
+    counter.textContent = excerptInput.value.length + '/180';
+    counter.classList.toggle('at-limit', excerptInput.value.length >= 170);
+  }
+
+  function updateWordCount() {
+    const words = bodyInput.value.trim().split(/\s+/).filter(Boolean).length;
+    $('#word-count').textContent = words + ' كلمة';
+  }
+
+  function updatePreview() {
+    const tone = (form.querySelector('input[name="tone"]:checked') || {}).value || 'cobalt';
+    const cover = normalizeUrl(coverInput.value);
+    previewArt.className = 'art tone-' + tone + (cover ? ' has-img' : '');
+    previewArt.setAttribute('data-letter', firstLetter(titleInput.value));
+    const old = previewArt.querySelector('img');
+    if (old) old.remove();
+    if (cover) {
+      const img = document.createElement('img');
+      img.src = cover;
+      img.alt = '';
+      img.referrerPolicy = 'no-referrer';
+      img.addEventListener('error', () => {
+        img.remove();
+        previewArt.classList.remove('has-img');
+        $('#cover-hint').textContent = 'تعذّر تحميل الصورة — سيُستخدم الغلاف المرسوم';
+      });
+      previewArt.appendChild(img);
+      $('#cover-hint').textContent = 'معاينة صورة الغلاف';
+    } else {
+      $('#cover-hint').textContent = 'اترك الرابط فارغاً لاستخدام غلاف مرسوم';
+    }
+  }
+
+  function clearFormErrors() {
+    for (const [field, input, err] of [
+      [$('#field-title'), titleInput, $('#title-err')],
+      [$('#field-body'), bodyInput, $('#body-err')]
+    ]) {
+      field.classList.remove('invalid');
+      input.removeAttribute('aria-invalid');
+      err.textContent = '';
+    }
+  }
+
+  function setFormMode(editing) {
+    editingId = editing ? editingId : null;
+    const isEditing = Boolean(editingId);
+    $('#compose-kicker').textContent = isEditing ? 'وضع التعديل' : 'مسودة جديدة';
+    $('#compose-title').textContent = isEditing ? 'عدّل المنشور' : 'اكتب منشوراً';
+    $('#compose-status').textContent = isEditing ? 'تعديل' : 'جاهز';
+    $('#compose-status').classList.toggle('edit', isEditing);
+    $('#save-btn').textContent = isEditing ? 'حفظ التعديلات' : 'نشر المنشور';
+    $('#cancel-edit').hidden = !isEditing;
+  }
+
+  function resetForm() {
+    form.reset();
+    editingId = null;
+    setFormMode(false);
+    clearFormErrors();
+    updateExcerptCounter();
+    updateWordCount();
+    updatePreview();
+    $('#cover-hint').textContent = 'اترك الرابط فارغاً لاستخدام غلاف مرسوم';
+  }
+
+  function focusComposer() {
+    $('#composer').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    setTimeout(() => titleInput.focus({ preventScroll: true }), 320);
+  }
+
+  function startEdit(id) {
+    const post = posts.find((p) => p.id === id);
+    if (!post) return;
+    editingId = id;
+    titleInput.value = post.title || '';
+    categoryInput.value = post.category || 'أخرى';
+    excerptInput.value = post.excerpt || '';
+    bodyInput.value = post.body || '';
+    coverInput.value = post.cover || '';
+    const tone = toneOf(post);
+    const radio = form.querySelector('input[name="tone"][value="' + tone + '"]');
+    if (radio) radio.checked = true;
+    setFormMode(true);
+    clearFormErrors();
+    updateExcerptCounter();
+    updateWordCount();
+    updatePreview();
+    focusComposer();
+    showToast('تم تحميل المنشور للتعديل');
+  }
+
+  function submitPost(event) {
+    event.preventDefault();
+    clearFormErrors();
+
+    const title = titleInput.value.trim();
+    const body = bodyInput.value.trim();
+    const category = categoryInput.value;
+    const tone = (form.querySelector('input[name="tone"]:checked') || {}).value || TONE_BY_CAT[category] || 'cobalt';
+    const cover = normalizeUrl(coverInput.value);
+    let excerpt = excerptInput.value.trim();
+
+    let ok = true;
+    if (title.length < 4) {
+      $('#field-title').classList.add('invalid');
+      titleInput.setAttribute('aria-invalid', 'true');
+      $('#title-err').textContent = 'اكتب عنواناً من 4 أحرف على الأقل.';
+      ok = false;
+    }
+    if (body.length < 30) {
+      $('#field-body').classList.add('invalid');
+      bodyInput.setAttribute('aria-invalid', 'true');
+      $('#body-err').textContent = 'اكتب محتوى من 30 حرفاً على الأقل.';
+      ok = false;
+    }
+    if (coverInput.value.trim() && !cover) {
+      showToast('رابط الغلاف غير صالح؛ استخدم رابط http أو https.', true);
+      coverInput.focus();
+      return;
+    }
+    if (!ok) {
+      (title.length < 4 ? titleInput : bodyInput).focus();
+      return;
+    }
+
+    if (!excerpt) {
+      const flat = body.replace(/\s+/g, ' ').trim();
+      excerpt = flat.length > 150 ? flat.slice(0, 150).trim() + '…' : flat;
+    }
+
+    const now = new Date().toISOString();
+
+    if (editingId) {
+      const index = posts.findIndex((p) => p.id === editingId);
+      if (index !== -1) {
+        posts[index] = { ...posts[index], title, category, tone, excerpt, body, cover, updatedAt: now };
+      }
+      savePosts();
+      renderAll();
+      resetForm();
+      showToast('تم حفظ التعديلات');
+    } else {
+      posts.unshift({
+        id: (crypto.randomUUID ? crypto.randomUUID() : 'p-' + Date.now() + '-' + Math.random().toString(16).slice(2)),
+        title, category, tone, excerpt, body, cover, date: now, updatedAt: now
+      });
+      savePosts();
+      renderAll();
+      resetForm();
+      showToast('تم نشر المنشور');
+    }
+
+    listQuery = '';
+    listCat = 'all';
+    $('#list-search').value = '';
+    $('#list-filter').value = 'all';
+    renderList();
+  }
+
+  function requestDelete(id) {
+    const post = posts.find((p) => p.id === id);
+    if (!post) return;
+    pendingDelete = id;
+    $('#confirm-text').textContent = 'سيُحذف «' + post.title + '» نهائياً من الدفتر.';
+    dialog.returnValue = '';
+    dialog.showModal();
+  }
+
+  dialog.addEventListener('close', () => {
+    if (dialog.returnValue !== 'delete' || !pendingDelete) return;
+    const id = pendingDelete;
+    pendingDelete = null;
+    posts = posts.filter((p) => p.id !== id);
+    savePosts();
+    if (editingId === id) resetForm();
+    renderAll();
+    showToast('تم حذف المنشور');
+  });
+
+  listEl.addEventListener('click', (event) => {
+    const edit = event.target.closest('[data-edit]');
+    if (edit) { startEdit(edit.dataset.edit); return; }
+    const del = event.target.closest('[data-del]');
+    if (del) requestDelete(del.dataset.del);
+  });
+
+  form.addEventListener('submit', submitPost);
+  titleInput.addEventListener('input', updatePreview);
+  coverInput.addEventListener('input', updatePreview);
+  excerptInput.addEventListener('input', updateExcerptCounter);
+  bodyInput.addEventListener('input', updateWordCount);
+  $$('input[name="tone"]', form).forEach((radio) => radio.addEventListener('change', updatePreview));
+
+  $('#cancel-edit').addEventListener('click', () => {
+    resetForm();
+    showToast('تم إلغاء التعديل');
+  });
+
+  $('#new-post-btn').addEventListener('click', () => {
+    resetForm();
+    focusComposer();
+  });
+
+  $('#logout').addEventListener('click', () => {
+    try {
+      sessionStorage.removeItem(SESSION_KEY);
+      localStorage.removeItem(SESSION_KEY);
+    } catch (_) { /* ignore */ }
+    location.href = 'index.html';
+  });
+
+  $$('.nav-item[data-target]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      $$('.nav-item[data-target]').forEach((b) => b.classList.remove('is-active'));
+      btn.classList.add('is-active');
+      const target = $('#' + btn.dataset.target);
+      if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      if (btn.dataset.target === 'composer') setTimeout(() => titleInput.focus({ preventScroll: true }), 320);
+    });
+  });
+
+  $('#list-search').addEventListener('input', (e) => {
+    listQuery = e.target.value;
+    renderList();
+  });
+  $('#list-filter').addEventListener('change', (e) => {
+    listCat = e.target.value;
+    renderList();
+  });
+
+  window.addEventListener('storage', (event) => {
+    if (event.key !== STORE_KEY) return;
+    posts = loadPosts();
+    if (editingId && !posts.some((p) => p.id === editingId)) resetForm();
+    renderAll();
+  });
+
+  try {
+    const today = new Date();
+    $('#today').textContent = new Intl.DateTimeFormat('ar-u-nu-latn', {
+      weekday: 'long', day: 'numeric', month: 'long', year: 'numeric'
+    }).format(today);
+  } catch (_) { /* ignore */ }
+
+  const session = readSession();
+  if (session && session.email) {
+    const mail = $('.user-info small');
+    if (mail) mail.textContent = session.email;
+  }
+
+  renderAll();
+  updateExcerptCounter();
+  updateWordCount();
+  updatePreview();
+})();
+</script>
+</body>
+</html>
