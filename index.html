@@ -3,7 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#22409A">
+<meta name="theme-color" content="#22409A" media="(min-width: 901px)">
+<meta name="theme-color" content="#F4EFE4" media="(max-width: 900px)">
 <title>تسجيل الدخول — مدحليوس</title>
 <meta name="description" content="سجّل الدخول إلى لوحة تحكم مدحليوس لإدارة المنشورات وكتابة الأفكار.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -108,12 +109,12 @@ svg{display:block}
 .kicker::before{content:"";width:26px;height:1px;background:currentColor;opacity:.55;flex:none}
 .brand-panel .kicker{color:rgba(244,239,228,.72)}
 .brand-panel .kicker::before{background:rgba(244,239,228,.5)}
-.brand-mid h1{
+.brand-mid .hero-title{
   margin:0 0 20px;
   font-family:var(--font-display);font-weight:700;
   font-size:clamp(38px,4.3vw,66px);line-height:1.14;letter-spacing:-.025em;
 }
-.brand-mid h1 span{color:#C9D4FF}
+.brand-mid .hero-title span{color:#C9D4FF}
 .brand-mid .lead{margin:0;max-width:36ch;font-size:15px;line-height:1.85;color:rgba(244,239,228,.74);font-weight:300}
 .brand-bottom{display:flex;align-items:center;gap:9px;font-size:12px;color:rgba(244,239,228,.72)}
 .dot{width:6px;height:6px;border-radius:50%;background:#C9D4FF;box-shadow:0 0 0 4px rgba(201,212,255,.14);flex:none}
@@ -136,7 +137,7 @@ svg{display:block}
   background:#EDF0E1;font-size:13px;color:#3E4A22;
 }
 .already a{font-weight:600;color:var(--olive);text-decoration:underline;text-underline-offset:3px}
-.form-wrap h2{
+.form-wrap h1{
   margin:0 0 8px;font-family:var(--font-display);font-weight:700;
   font-size:clamp(32px,3.4vw,42px);line-height:1.2;letter-spacing:-.02em;
 }
@@ -188,25 +189,8 @@ form{display:flex;flex-direction:column;gap:18px}
 .btn.primary:disabled{opacity:.8;cursor:wait;transform:none}
 .spinner{width:17px;height:17px;border:2px solid rgba(244,239,228,.35);border-top-color:var(--paper);border-radius:50%;animation:spin .7s linear infinite;display:none}
 .btn.loading .spinner{display:inline-block}
-.demo{
-  display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;
-  margin-top:26px;padding:13px 15px;border:1px dashed var(--line-strong);border-radius:var(--r-md);
-  background:rgba(255,252,244,.62);
-}
-.demo b{display:block;font-size:12px;font-weight:600;color:var(--muted);margin-bottom:3px}
-.demo span{font-family:var(--font-mono);font-size:12px;direction:ltr;unicode-bidi:isolate;color:var(--ink-2);display:inline-block}
-.demo button{
-  border:1px solid var(--line-strong);background:var(--card);border-radius:7px;
-  padding:6px 11px;font-size:11.5px;color:var(--ink-2);cursor:pointer;transition:border-color .16s,color .16s;
-}
-.demo button:hover{border-color:var(--cobalt);color:var(--cobalt)}
-.demo.pulse{animation:pulse 1.1s ease}
-.fine{margin:18px 0 0;font-size:11.5px;line-height:1.75;color:#6F6759;max-width:44ch}
-.form-footer{display:flex;align-items:center;justify-content:space-between;gap:12px;font-family:var(--font-mono);font-size:10px;letter-spacing:.08em;color:#6F6759}
-
 @keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
 @keyframes spin{to{transform:rotate(360deg)}}
-@keyframes pulse{0%,100%{border-color:var(--line-strong)}35%{border-color:var(--cobalt);background:var(--cobalt-soft)}}
 @keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-6px)}40%{transform:translateX(5px)}60%{transform:translateX(-3px)}80%{transform:translateX(2px)}}
 form.shake{animation:shake .34s ease}
 
@@ -215,22 +199,14 @@ form.shake{animation:shake .34s ease}
 }
 @media (max-width:900px){
   .shell{grid-template-columns:1fr}
-  .brand-panel{min-height:320px;gap:18px}
-  .brand-panel::after{font-size:clamp(280px,55vw,420px);bottom:-.42em}
-  .brand-mid{padding-block:18px 26px;max-width:46ch}
-  .brand-mid h1{font-size:clamp(34px,7vw,48px)}
-  .vertical{display:none}
-  .form-panel{min-height:auto}
-  .form-wrap{margin:0 auto;padding-block:clamp(30px,7vh,56px)}
+  .brand-panel,
+  .form-top,
+  .form-wrap .kicker{display:none}
+  .form-wrap{margin:auto;padding-block:clamp(28px,7vh,56px)}
 }
 @media (max-width:520px){
-  .brand-panel{padding:20px;min-height:290px}
-  .brand-mid h1{font-size:clamp(30px,9vw,40px)}
-  .brand-mid .lead{font-size:13.5px}
   .form-panel{padding:18px}
-  .form-wrap h2{font-size:32px}
-  .demo{align-items:flex-start}
-  .fine{font-size:11px}
+  .form-wrap h1{font-size:32px}
 }
 @media (prefers-reduced-motion:reduce){
   html{scroll-behavior:auto}
@@ -255,7 +231,7 @@ form.shake{animation:shake .34s ease}
 
     <div class="brand-mid">
       <p class="kicker">مساحة للنشر والتحرير</p>
-      <h1>نكتب الفكرة،<br>نرتبها، ثم<br><span>ننشرها.</span></h1>
+      <p class="hero-title">نكتب الفكرة،<br>نرتبها، ثم<br><span>ننشرها.</span></p>
       <p class="lead">لوحة واحدة للمنشورات: اكتب، صنّف، وانشر. وكل ما تنشره يظهر مباشرة في صفحة القراءة.</p>
     </div>
 
@@ -278,7 +254,7 @@ form.shake{animation:shake .34s ease}
       </div>
 
       <p class="kicker">مرحباً بعودتك</p>
-      <h2>تسجيل الدخول</h2>
+      <h1>تسجيل الدخول</h1>
       <p class="sub">أدخل بياناتك للوصول إلى لوحة التحكم وإدارة المنشورات.</p>
 
       <form id="login-form" novalidate>
@@ -315,22 +291,7 @@ form.shake{animation:shake .34s ease}
           <span class="btn-label">دخول إلى لوحة التحكم</span>
         </button>
       </form>
-
-      <div class="demo" id="demo">
-        <div>
-          <b>حساب التجربة</b>
-          <span>admin@mdhileos.com · admin123</span>
-        </div>
-        <button type="button" id="copy-creds">نسخ</button>
-      </div>
-
-      <p class="fine">هذه نسخة عرض تعمل محلياً في متصفحك؛ لا تُرسل بيانات الدخول إلى أي خادم.</p>
     </div>
-
-    <footer class="form-footer">
-      <span>© 2026 MDHILEOS</span>
-      <span>V1.0</span>
-    </footer>
   </main>
 </div>
 
@@ -349,7 +310,6 @@ form.shake{animation:shake .34s ease}
   const remember = $('#remember');
   const alertBox = $('#alert');
   const submit = $('#submit');
-  const demo = $('#demo');
   const already = $('#already');
 
   function readSession() {
@@ -404,22 +364,8 @@ form.shake{animation:shake .34s ease}
 
   $('#forgot').addEventListener('click', () => {
     clearErrors();
-    alertBox.textContent = 'كلمة المرور التجريبية موجودة في صندوق حساب التجربة بالأسفل.';
+    alertBox.textContent = 'هذه نسخة تجريبية: اسم المستخدم admin وكلمة المرور admin123.';
     alertBox.className = 'alert info show';
-    demo.classList.remove('pulse');
-    void demo.offsetWidth;
-    demo.classList.add('pulse');
-  });
-
-  $('#copy-creds').addEventListener('click', async (e) => {
-    const btn = e.currentTarget;
-    try {
-      await navigator.clipboard.writeText(DEMO.email + ' / ' + DEMO.pass);
-      btn.textContent = 'تم النسخ';
-    } catch (_) {
-      btn.textContent = 'تعذّر النسخ';
-    }
-    setTimeout(() => { btn.textContent = 'نسخ'; }, 1600);
   });
 
   form.addEventListener('submit', (e) => {
@@ -451,7 +397,7 @@ form.shake{animation:shake .34s ease}
     const validPass = pass === DEMO.pass;
 
     if (!validUser || !validPass) {
-      showError('بيانات الدخول غير صحيحة. جرّب حساب التجربة الموضح بالأسفل.');
+      showError('بيانات الدخول غير صحيحة. تحقق وحاول مرة أخرى.');
       failField($('#field-user'), userInput, $('#user-error'), 'تحقق من اسم المستخدم أو البريد.');
       failField($('#field-pass'), passInput, $('#pass-error'), 'تحقق من كلمة المرور.');
       userInput.focus();
